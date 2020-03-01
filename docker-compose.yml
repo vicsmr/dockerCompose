@@ -1,0 +1,30 @@
+worker:
+  build: ./worker
+  ports:
+    - "8080:8080"
+  links:
+    - dbMYSQL
+    - externalservice
+dbMYSQL:
+  environment:
+    - MYSQL_ROOT_PASSWORD=pass
+    - MYSQL_DATABASE=test
+  image: mysql
+  ports:
+    - "3306:3306"
+externalservice:
+  build: ./externalservice
+  ports:
+    - "9090:9090"
+server:
+  build: ./server
+  ports:
+    - "8081:8081"
+  volumes:
+    - .:/public
+  links:
+    - dbMongo
+dbMongo:
+  image: mongo:latest
+  ports:
+    - "27017:27017"
