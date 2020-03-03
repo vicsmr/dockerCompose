@@ -83,8 +83,38 @@
 				<groupId>com.google.cloud.tools</groupId>
 				<artifactId>jib-maven-plugin</artifactId>
 				<version>1.6.1</version>
+				<configuration>
+					<from>
+						<image>openjdk:8-jre</image>
+					</from>
+					<to>
+						<image>vicsmr/worker:latest</image>
+					</to>
+					<extraDirectories>
+						<paths>
+							<path>jib</path>
+						</paths>
+					</extraDirectories>
+					<container>
+						<entrypoint>
+							<shell>bash</shell>
+							<option>-c</option>
+							<arg>chmod +x wait-for-it.sh &amp;&amp; sync &amp;&amp; ./wait-for-it.sh dbMYSQL:3306 --strict --timeout=10000 &amp;&amp; java -jar worker.jar</arg>
+						</entrypoint>
+						<ports>
+							<port>8080</port>
+						</ports>
+					</container>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.xolstice.maven.plugins</groupId>
 				<artifactId>protobuf-maven-plugin</artifactId>
@@ -107,6 +137,10 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
 		</plugins>
 	</build>
 
